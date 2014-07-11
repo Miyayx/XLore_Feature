@@ -94,7 +94,6 @@ public class EnglishMain {
 				// System.out.println("time---------" + (start - end));
 
 				// bw.flush();
-				System.out.println();
 				threadPool.execute(new ParserThread(count, sent, mparser, bw));
 
 				// tags = new HashMap<String, String>();
@@ -115,10 +114,10 @@ public class EnglishMain {
 	}
 
 	public static void main(String[] args) {
-		String inPath = "/home/lsj/data/enwiki/";
-		String outPath = "/home/lmy/data/parser/";
-		// String inPath = "etc/";
-		// String outPath = "etc/";
+		//String inPath = "/home/lsj/data/enwiki/";
+		//String outPath = "/home/lmy/data/parser/";
+		 String inPath = "etc/";
+		 String outPath = "etc/";
 		String inFile = "enwiki-instance-concept-1v1.dat";
 		String outFile = "";
 
@@ -165,10 +164,17 @@ public class EnglishMain {
 				s = s.replace('》', ' ').replace('《', ' ').replace('【', ' ')
 						.replace('】', ' ').replace('：', ' ');
 			}
-			//System.out.println("Sentence-->" + s);
-			Tree parser = mparser.getParserTree(s);
-			String tw = mparser.getTaggedWord(parser).toString();
-			String td = mparser.getTypedDependency(parser).toString();
+			// System.out.println("Sentence-->" + s);
+			String tw = "[]";
+			String td = "[]";
+			try {
+				Tree parser = mparser.getParserTree(s);
+				tw = mparser.getTaggedWord(parser).toString();
+				td = mparser.getTypedDependency(parser).toString();
+			} catch (Exception e) {
+				System.out.println("Special Sentence:" + s);
+				System.out.println(s + delimiter + tw + delimiter + td );
+			}
 
 			if (count % 1000 == 0)
 				System.out.println(">>>" + count);
