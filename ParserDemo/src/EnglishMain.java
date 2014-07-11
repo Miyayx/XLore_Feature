@@ -8,38 +8,41 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import edu.stanford.nlp.trees.Tree;
 
 public class EnglishMain {
 
-	static int increment = 5000;
 	static String delimiter = "\t\t";
+	static int minThread = 10;
+	static int maxThread = 20;
 
 	public static void parseOneSet(Set<String> sents, String outFile) {
 
 		Set<String> recordSents = new HashSet<String>();
 		try {
-			recordSents = new FileManager(delimiter).readFileToSets(outFile).get(0);
-			// for(String s:recordSents){
-			// System.out.println(s);
-			// }
+			recordSents = new FileManager(delimiter).readFileToSets(outFile)
+					.get(0);
+			for (String s : recordSents)
+				System.out.println(s);
+
 			System.out.println(recordSents.size());
 		} catch (Exception e) {
 		}
 
 		EnglishParser mparser = new EnglishParser();
 
-		File file = new File(outFile);
 		OutputStreamWriter writer = null;
 		BufferedWriter bw = null;
 		try {
-			OutputStream os = new FileOutputStream(file, true);
+			OutputStream os = new FileOutputStream(new File(outFile), true);
 			writer = new OutputStreamWriter(os, "UTF-8");
 			bw = new BufferedWriter(writer);
 
@@ -47,13 +50,15 @@ public class EnglishMain {
 			// int classLen = sents1.size();
 			Iterator<String> it = sents.iterator();
 			int classLen = sents.size();
-			int progressSlice = classLen / 100;
 			System.out.println("length: " + classLen);
+
+			ThreadPoolExecutor threadPool = new ThreadPoolExecutor(minThread,
+					maxThread, 60, TimeUnit.SECONDS,
+					new LinkedBlockingQueue<Runnable>(10),
+					new ThreadPoolExecutor.CallerRunsPolicy());
+
 			int count = 0;
-			Map<String, String> tags = new HashMap<String, String>();
-			Map<String, String> dependencies = new HashMap<String, String>();
-			List<ParserThread> threadList = new ArrayList<ParserThread>();
-			Set<String> sentList = new LinkedHashSet<String>();
+
 			while (it.hasNext()) {
 				count++;
 
@@ -89,52 +94,14 @@ public class EnglishMain {
 				// System.out.println("time---------" + (start - end));
 
 				// bw.flush();
-
-				threadList.add(new ParserThread(count, tags, dependencies,
-						sent, mparser));
+				System.out.println();
+				threadPool.execute(new ParserThread(count, sent, mparser, bw));
 
 				// tags = new HashMap<String, String>();
 				// dependencies = new HashMap<String, String>();
 				// threadList = new ArrayList<Thread>();
 				// sentList = new LinkedHashSet<String>();
 
-			}
-
-			int threadLen = threadList.size();
-			System.out.println("Thread Len-->" + threadLen);
-			for (int i = 0; i < threadLen; i += increment) {
-				System.out.println("Start --> " + i * 100 / (float) threadLen
-						+ "%");
-				for (ParserThread t : threadList.subList(i,
-						Math.min(i + increment, threadLen))) {
-					t.start();
-				}
-
-				System.out.println("Join ID-->" + i * 100 / (float) threadLen
-						+ "%");
-				for (ParserThread t : threadList.subList(i,
-						Math.min(i + increment, threadLen))) {
-					// for (ParserThread t:threadList){
-					try {
-						t.join();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-				for (ParserThread t : threadList.subList(i,
-						Math.min(i + increment, threadLen))) {
-					// for (ParserThread t:threadList){
-					String s = t.getSent();
-					try {
-						bw.write(s + delimiter + tags.get(s).toString()
-								+ delimiter + dependencies.get(s).toString()
-								+ "\n");
-						bw.flush();
-					} catch (Exception e) {
-						System.out.println("Error String: " + s);
-						System.out.println("Line num:" + t.getCount());
-					}
-				}
 			}
 
 			System.out.println("end");
@@ -150,6 +117,8 @@ public class EnglishMain {
 	public static void main(String[] args) {
 		String inPath = "/home/lsj/data/enwiki/";
 		String outPath = "/home/lmy/data/parser/";
+		// String inPath = "etc/";
+		// String outPath = "etc/";
 		String inFile = "enwiki-instance-concept-1v1.dat";
 		String outFile = "";
 
@@ -168,19 +137,17 @@ public class EnglishMain {
 
 	static class ParserThread extends Thread {
 		private int count;
-		private Map<String, String> tags;
-		private Map<String, String> dependencies;
 		private String sent;
 		private EnglishParser mparser;
+		private BufferedWriter bw;
 
-		public ParserThread(int count, Map<String, String> tags,
-				Map<String, String> dependencies, String sent,
-				EnglishParser mparser) {
+		public ParserThread(int count, String sent, EnglishParser mparser,
+				BufferedWriter bw) {
+
 			this.count = count;
-			this.tags = tags;
-			this.dependencies = dependencies;
 			this.sent = sent;
 			this.mparser = mparser;
+			this.bw = bw;
 		}
 
 		@Override
@@ -198,14 +165,24 @@ public class EnglishMain {
 				s = s.replace('》', ' ').replace('《', ' ').replace('【', ' ')
 						.replace('】', ' ').replace('：', ' ');
 			}
+			System.out.println("Sentence-->" + s);
 			Tree parser = mparser.getParserTree(s);
-			tags.put(sent, mparser.getTaggedWord(parser).toString());
-			dependencies.put(sent, mparser.getTypedDependency(parser)
-					.toString());
+			String tw = mparser.getTaggedWord(parser).toString();
+			String td = mparser.getTypedDependency(parser).toString();
 
 			if (count % 1000 == 0)
 				System.out.println(">>>" + count);
 
+			synchronized (bw) {
+				try {
+					bw.write(s + delimiter + tw + delimiter + td + "\n");
+					bw.flush();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
 		}
 
 		public String getSent() {

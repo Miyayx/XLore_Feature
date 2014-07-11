@@ -37,6 +37,7 @@ public class FileManager {
 			// 一次读入一行，直到读入null为文件结束
 			while ((tempString = reader.readLine()) != null) {
 				String[] words = tempString.split(delimiter, 2);
+				
 				superClass.add(words[0]);
 				subClass.add(words[1]);
 			}
@@ -72,8 +73,11 @@ public class FileManager {
 					for(int k = 0; k < words.length;k++)
 						sets.add(new HashSet<String>());
 				}
-				for(int i = 0;i<words.length;i++)
+				for(int i = 0;i<words.length;i++){
+					if (words[i].length()==0)
+						System.out.println(tempString);
 					sets.get(i).add(words[i]);
+				}
 				
 			}
 			reader.close();
