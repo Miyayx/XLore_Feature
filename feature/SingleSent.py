@@ -18,6 +18,11 @@ class SingleSent:
                 self.unHeadword = self.string.split(' ')
                 self.unHeadword.remove(s)
 
+        # Delete no use value for free memory
+        self.typedDependency = None
+        self.taggedWords = None
+        self.taggedD = None
+
     def separateTypedDependency(self,tdstr):
     
         types = tdstr[1:-1].split('), ')
