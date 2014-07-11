@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE project>
+
+<project name="ParserDemo" default="usage" basedir=".">
+	<property name="project-name" value="ParserDemo" />
+
+	<property name="build" location="classes" />
+	<property name="lib" location="lib" />
+	<property name="src" location="src" />
+	<property name="etc" location="etc" />
+
+
+	<path id="Third-Party Libraries">
+		<fileset dir="${lib}">
+			<include name="**/*.jar" />
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<target name="usage" description="Build file usage info (default task)">
+		<echo message="-------------------------------------------------------" />
+		<echo message="This is the ant buidl.xml for Parser Project" />
+		<echo message="-------------------------------------------------------" />
+	</target>
+
+	<target name="prepare">
+		<mkdir dir="${build}" />
+	</target>
+
+	<target name="clean">
+		<delete dir="${build}" />
+	</target>
+
+	<target name="compile" depends="clean, prepare">
+		<echo message="Compiling the source code!" />
+		<javac srcdir="${src}" destdir="${build}" deprecation="no" failonerror="true" debug="true" source="1.6">
+			<classpath refid="Third-Party Libraries" />
+		</javac>
+	</target>
+
+	<target name="ch-main" description="use parser for word segmentation " depends="compile">
+		<java classname="ChineseMain" classpath="${build}" fork="true" maxmemory="30000m">
+			<classpath refid="Third-Party Libraries" />
+			<arg line="${cmdline}" />
+		</java>
+	</target>
+	<target name="en-main" description="use parser for word segmentation " depends="compile">
+		<java classname="EnglishMain" classpath="${build}" fork="true" maxmemory="30000m">
+			<classpath refid="Third-Party Libraries" />
+			<arg line="${cmdline}" />
+		</java>
+	</target>
+</project>
+
