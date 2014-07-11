@@ -74,8 +74,10 @@ public class FileManager {
 						sets.add(new HashSet<String>());
 				}
 				for(int i = 0;i<words.length;i++){
-					if (words[i].length()==0)
+					if (words[i].length()==0){
+						System.out.println("LEN 0");
 						System.out.println(tempString);
+					}
 					sets.get(i).add(words[i]);
 				}
 				

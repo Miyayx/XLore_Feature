@@ -165,7 +165,7 @@ public class EnglishMain {
 				s = s.replace('》', ' ').replace('《', ' ').replace('【', ' ')
 						.replace('】', ' ').replace('：', ' ');
 			}
-			System.out.println("Sentence-->" + s);
+			//System.out.println("Sentence-->" + s);
 			Tree parser = mparser.getParserTree(s);
 			String tw = mparser.getTaggedWord(parser).toString();
 			String td = mparser.getTypedDependency(parser).toString();
