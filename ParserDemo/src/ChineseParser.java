@@ -20,8 +20,7 @@ import edu.stanford.nlp.trees.international.pennchinese.ChineseGrammaticalStruct
 import edu.stanford.nlp.trees.international.pennchinese.ChineseGrammaticalStructureFactory;
 import edu.stanford.nlp.trees.international.pennchinese.ChineseTreebankLanguagePack;
 
-
-public class ChineseParser {
+public class ChineseParser implements Parser {
 	private LexicalizedParser lp;
 	private TreebankLanguagePack tlp;
 	private GrammaticalStructureFactory gsf;
@@ -47,7 +46,8 @@ public class ChineseParser {
 			System.out.println(parse.taggedYield());
 			System.out.println();
 
-			ChineseGrammaticalStructure gs = (ChineseGrammaticalStructure) gsf.newGrammaticalStructure(parse);
+			ChineseGrammaticalStructure gs = (ChineseGrammaticalStructure) gsf
+					.newGrammaticalStructure(parse);
 			List<TypedDependency> tdl = gs.typedDependenciesCCprocessed(true);
 			System.out.println(tdl);
 			System.out.println();
@@ -85,11 +85,11 @@ public class ChineseParser {
 		return parse.taggedYield();
 	}
 
-	public Collection getTypedDependency(Tree parse) {
+	public List<TypedDependency> getTypedDependency(Tree parse) {
 
 		GrammaticalStructure gs = gsf.newGrammaticalStructure(parse);
-		Collection tdl = gs.typedDependenciesCollapsed();
-
+		// Collection tdl = gs.typedDependenciesCollapsed();
+		List<TypedDependency> tdl = gs.typedDependenciesCCprocessed();
 		return tdl;
 	}
 }

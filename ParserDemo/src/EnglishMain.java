@@ -20,6 +20,7 @@ import edu.stanford.nlp.trees.Tree;
 
 public class EnglishMain {
 
+	static Parser mparser = null;
 	static String delimiter = "\t\t";
 	static int minThread = 10;
 	static int maxThread = 20;
@@ -36,8 +37,6 @@ public class EnglishMain {
 			System.out.println(recordSents.size());
 		} catch (Exception e) {
 		}
-
-		EnglishParser mparser = new EnglishParser();
 
 		OutputStreamWriter writer = null;
 		BufferedWriter bw = null;
@@ -84,6 +83,8 @@ public class EnglishMain {
 		String inFile = "enwiki-instance-concept-1v1.dat";
 		String outFile = "";
 
+		mparser = new EnglishParser();
+
 		System.out.println("Reading InputFile:" + inFile);
 		List<Set<String>> sentSet = new FileManager(delimiter)
 				.readFileToSets(inPath + inFile);
@@ -100,10 +101,10 @@ public class EnglishMain {
 	static class ParserThread extends Thread {
 		private int count;
 		private String sent;
-		private EnglishParser mparser;
+		private Parser mparser;
 		private BufferedWriter bw;
 
-		public ParserThread(int count, String sent, EnglishParser mparser,
+		public ParserThread(int count, String sent, Parser mparser,
 				BufferedWriter bw) {
 
 			this.count = count;

@@ -5,7 +5,6 @@ import edu.stanford.nlp.ling.CoreLabel;
 import edu.stanford.nlp.ling.HasWord;
 import edu.stanford.nlp.ling.TaggedWord;
 import edu.stanford.nlp.objectbank.TokenizerFactory;
-import edu.stanford.nlp.parser.Parser;
 import edu.stanford.nlp.parser.lexparser.LexicalizedParser;
 import edu.stanford.nlp.process.CoreLabelTokenFactory;
 import edu.stanford.nlp.process.DocumentPreprocessor;
@@ -18,18 +17,17 @@ import edu.stanford.nlp.trees.TreePrint;
 import edu.stanford.nlp.trees.TreebankLanguagePack;
 import edu.stanford.nlp.trees.TypedDependency;
 
-public class EnglishParser {
+public class EnglishParser implements Parser {
 	private LexicalizedParser lp;
 	private TreebankLanguagePack tlp;
 	private GrammaticalStructureFactory gsf;
 
 	public EnglishParser() {
 		lp = LexicalizedParser
-		 .loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
+				.loadModel("edu/stanford/nlp/models/lexparser/englishPCFG.ser.gz");
 		tlp = new PennTreebankLanguagePack();
 		gsf = tlp.grammaticalStructureFactory();
 	}
-
 
 	public Tree getParserTree(String sent) {
 
@@ -94,4 +92,5 @@ public class EnglishParser {
 
 		return tdl;
 	}
+
 }
