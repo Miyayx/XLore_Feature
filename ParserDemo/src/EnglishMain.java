@@ -46,8 +46,6 @@ public class EnglishMain {
 			writer = new OutputStreamWriter(os, "UTF-8");
 			bw = new BufferedWriter(writer);
 
-			// Iterator<String> it = sents1.iterator();
-			// int classLen = sents1.size();
 			Iterator<String> it = sents.iterator();
 			int classLen = sents.size();
 			System.out.println("length: " + classLen);
@@ -62,45 +60,10 @@ public class EnglishMain {
 			while (it.hasNext()) {
 				count++;
 
-				// long start = System.currentTimeMillis();
-
 				String sent = it.next();
 				if (recordSents.contains(sent))
 					continue;
-
-				// bw.write(sent + "\t\t");
-
-				// Tree parser = mparser.getParserTree(sent);
-
-				// bw.write(mparser.getTaggedWord(parser).toString() +
-				// "\t\t");
-				// bw.write(mparser.getTypedDependency(parser).toString() +
-				// "\n");
-				// System.out.println(parser.getTaggedWord(sent));
-
-				// System.out.println(mparser.getTaggedWord(parser).toString()
-				// + "\t\t");
-				// System.out.println(mparser.getTypedDependency(parser)
-				// .toString() + "\n");
-
-				// System.out.println(count);
-				// System.out.println("tags: " + tags.size());
-				// System.out.println(tags.toString());
-				// System.out.println("typedDependencies: " +
-				// dependencies.size());
-				// System.out.println(dependencies.toString());
-
-				// long end = System.currentTimeMillis();
-				// System.out.println("time---------" + (start - end));
-
-				// bw.flush();
 				threadPool.execute(new ParserThread(count, sent, mparser, bw));
-
-				// tags = new HashMap<String, String>();
-				// dependencies = new HashMap<String, String>();
-				// threadList = new ArrayList<Thread>();
-				// sentList = new LinkedHashSet<String>();
-
 			}
 
 			System.out.println("end");
@@ -114,10 +77,10 @@ public class EnglishMain {
 	}
 
 	public static void main(String[] args) {
-		//String inPath = "/home/lsj/data/enwiki/";
-		//String outPath = "/home/lmy/data/parser/";
-		 String inPath = "etc/";
-		 String outPath = "etc/";
+		// String inPath = "/home/lsj/data/enwiki/";
+		// String outPath = "/home/lmy/data/parser/";
+		String inPath = "etc/";
+		String outPath = "etc/";
 		String inFile = "enwiki-instance-concept-1v1.dat";
 		String outFile = "";
 
@@ -173,7 +136,7 @@ public class EnglishMain {
 				td = mparser.getTypedDependency(parser).toString();
 			} catch (Exception e) {
 				System.out.println("Special Sentence:" + s);
-				System.out.println(s + delimiter + tw + delimiter + td );
+				System.out.println(s + delimiter + tw + delimiter + td);
 			}
 
 			if (count % 1000 == 0)
