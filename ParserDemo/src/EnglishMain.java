@@ -76,11 +76,16 @@ public class EnglishMain {
 	}
 
 	public static void main(String[] args) {
-		// String inPath = "/home/lsj/data/enwiki/";
-		// String outPath = "/home/lmy/data/parser/";
-		String inPath = "etc/";
-		String outPath = "etc/";
-		String inFile = "enwiki-instance-concept-1v1.dat";
+		String inPath = "/home/lsj/data/enwiki/";
+		//String inPath = "/home/lsj/data/zhwiki/";
+		//String inPath = "/home/lsj/data/baidu/";
+		//String inPath = "/home/lsj/data/hudong/";
+
+		String outPath = "/home/lmy/data/parser/";
+		//String inPath = "etc/";
+		//String outPath = "etc/";
+		//String inFile = "enwiki-instance-concept-1v1.dat";
+		String inFile = "enwiki-concept-sub-1v1.dat";
 		String outFile = "";
 
 		mparser = new EnglishParser();
