@@ -23,6 +23,10 @@ class CHSingleSent:
         #except:
         #    print "Error"
         #    print item[0]
+        self.typedDependency = None
+        self.taggedWords = None
+        self.taggedD = None
+        self.allWords = None
 
     def separateTypedDependency(self,tdstr):
         """

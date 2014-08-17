@@ -1,7 +1,7 @@
 from SingleSent import *
 import codecs
 
-WORDS_DELIMITER = "\t\t"
+delimiter = "\t\t"
 
 typed = ["root", "prep","nn", "dep", "amod", "conj", "det", "abbrev", "poss", "appos", 
 "nsubj", "pobj", "dobj", "num","npadvmod", "aux", "advmod", "rcmod", "cop", "xcomp", 
@@ -14,7 +14,7 @@ def readDataFromFile(filename):
     print filename
     llist = []
     for line in codecs.open(filename,'r','utf-8'):
-        eachLine = line.strip('\n').split(WORDS_DELIMITER)#strip('\n') to remove line feed
+        eachLine = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
         llist.append(eachLine)
             
     print len(llist)
@@ -87,7 +87,7 @@ def recordHeadword(filename,d):
 DATA_PATH = "/home/lsj/data/enwiki/"
 PARSER_PATH = "/home/lmy/data/parser/"
 FEATURE_PATH = "/home/lmy/data/feature/"
-HEADWORD_PATH = "./headword"
+HEADWORD_PATH = "./headword/"
 
 if __name__=="__main__":
     
@@ -95,7 +95,9 @@ if __name__=="__main__":
     datafile = DATA_PATH+FILE_NAME
     superfile = PARSER_PATH+FILE_NAME.split(".")[0]+"-0column.dat"
     subfile = PARSER_PATH+FILE_NAME.split(".")[0]+"-1column.dat"
-    featurefile = FEATURE_PATH+FILE_NAME.split(".")[0]+"feature9.dat"
+    featurefile = FEATURE_PATH+FILE_NAME.split(".")[0]+"-feature9.dat"
+    super_headword_file = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-superheadword.dat"
+    sub_headword_file = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-subheadword.dat"
 
     superl = []
     superD = {}
@@ -127,8 +129,8 @@ if __name__=="__main__":
     recordHeadword(HEADWORD_PATH+'sub_headword.dat',subHeadword)
     
     fwrite = codecs.open(featurefile,'w','UTF-8')
-    for line in codecs.open(datafile,'r','utf-8')
-        item = line.strip('\n').split(WORDS_DELIMITER)#strip('\n') to remove line feed
+    for line in codecs.open(datafile,'r','utf-8'):
+        item = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
         try:
             superS = superD[item[0]]
             subS = subD[item[1]]

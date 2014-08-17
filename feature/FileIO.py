@@ -7,15 +7,14 @@
 from CHSingleSent import *
 import codecs
 
-def readDataFromFile(filename):
+def readDataFromFile(filename, delimiter = "\t\t"):
     """
     str(filename) -> list of list(each list contain two items)
-    the file has two columns with separated by '\t\t'
+    the file has two columns with separated by delimiter
     """
-    with codecs.open(filename,'r','utf-8') as f:
-        return [line.strip('\n').split('\t') for line in f.readlines()]
+    return [line.strip('\n').split(delimiter) for line in codecs.open(filename,'r','utf-8')]
 
-def recordHeadword(filename,d):
+def recordHeadword(filename,d,delimiter="\t\t"):
     """
     (str,dict) -> NoneType
     For English, there maybe more than one headword, so there may be a headwordlist
@@ -31,16 +30,13 @@ def recordHeadword(filename,d):
                     f.write("\t%s"%i)
                 f.write("\n")
             else:
-                f.write("%s\t\t%s\n"%(k,v))
+                f.write("%s%s%s\n"%(k,delimiter,v))
+            f.flush()
 
 
 def readTwoColumnsToDict(filename,reverse=False,delimiter='\t\t'):
     d = {}    
-    f = codecs.open(filename,'r','utf-8')
-    while True:
-        line = f.readline()
-        if not line:
-            break
+    for line in codecs.open(filename,'r','utf-8'):
         eachLine = line.strip('\n').split(delimiter)
         if reverse:
             if not d.has_key(eachLine[1]):
@@ -51,5 +47,4 @@ def readTwoColumnsToDict(filename,reverse=False,delimiter='\t\t'):
                 d[eachLine[0]] = []
             d[eachLine[0]].append(eachLine[1])
     print len(d)
-    f.close()
     return d

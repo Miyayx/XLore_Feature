@@ -5,14 +5,21 @@ from CHSingleSent import *
 import FileIO
 import threading
 
-DATAFILE='/home/zigo/SemantifyWiki/etc/dataset/sample-5-title.dat'
-SUPER_FILE='/home/lmy/data/parser/ha-title-taggedword-typeddependency.dat'
-SUB_FILE='/home/lmy/data/parser/hc-title-taggedword-typeddependency.dat'
+DATA_PATH = "/home/lsj/data/zhwiki/"
+PARSER_PATH = "/home/lmy/data/parser/"
+FEATURE_PATH = "/home/lmy/data/feature/"
+HEADWORD_PATH = "./headword/"
 
-FEATURE13='/home/lmy/data/CLKB/sample-5-13features.dat'
+FILE_NAME = "zhwiki-instance-concept-1v1.dat"
 
-SUPER_HEADWORD_FILE = 'sample-5-headword-super.dat'
-SUB_HEADWORD_FILE = 'sample-5-headword-sub.dat'
+DATAFILE= DATA_PATH + FILE_NAME
+SUPER_FILE = PARSER_PATH+FILE_NAME.split(".")[0]+"-0column.dat"
+SUB_FILE = PARSER_PATH+FILE_NAME.split(".")[0]+"-1column.dat"
+
+FEATURE13=FEATURE_PATH+FILE_NAME.split(".")[0]+"-feature13.dat"
+
+SUPER_HEADWORD_FILE = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-superheadword.dat"
+SUB_HEADWORD_FILE = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-subheadword.dat"
 
 delimiter = '\t\t'
 
@@ -76,12 +83,8 @@ def getRalationshipOfTwoSets2(l1,l2):
 def recordInputtedFile(newfile):
     inputted_lines = []
     try:
-       with codecs.open(newfile,'r','utf-8') as f:
-           while True:
-               line = f.readline()
-               if not line:
-                   break
-               inputted_lines.append(line.strip('\n').split('\t\t')[0])
+       for line in codecs.open(newfile,'r','utf-8'):
+           inputted_lines.append(line.strip('\n').split(delimiter)[0])
     except:
         pass
     return inputted_lines
