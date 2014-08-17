@@ -9,8 +9,7 @@ DATAFILE='/home/zigo/SemantifyWiki/etc/dataset/sample-5-title.dat'
 SUPER_FILE='/home/lmy/data/parser/ha-title-taggedword-typeddependency.dat'
 SUB_FILE='/home/lmy/data/parser/hc-title-taggedword-typeddependency.dat'
 
-FEATURE9='/home/lmy/data/CLKB/sample-5-9features.dat'
-FEATURE11='/home/lmy/data/CLKB/sample-5-11features.dat'
+FEATURE13='/home/lmy/data/CLKB/sample-5-13features.dat'
 
 SUPER_HEADWORD_FILE = 'sample-5-headword-super.dat'
 SUB_HEADWORD_FILE = 'sample-5-headword-sub.dat'
@@ -137,10 +136,12 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
         relation8 = getRalationshipOfTwoSets2(superS.headword,subS.unHeadword)
         relation9 = getRalationshipOfTwoSets2(subS.headword,superS.unHeadword)
         print "write one line"
-        fwrite.write('%s\t%s\t\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%.3f,%.3f\n'%(
+        fwrite.write('%s\t%s\t\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.3f,%.3f\n'%(
             superStr,subStr,relation,
             1 if subStr.startswith(superStr) else 0,
             1 if subStr.endswith(superStr) else 0,
+            1 if superStr.startswith(subStr) else 0,
+            1 if superStr.endswith(subStr) else 0,
             superS.hwLen,subS.hwLen,superS.wordLen,subS.wordLen,
             relation8,relation9,
             super_sub_freD[superStr][subStr],
@@ -228,5 +229,5 @@ if __name__ == '__main__':
         t.join()
     
     print "Writing to file..."
-    writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,FEATURE11,DATAFILE)
+    writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,FEATURE13,DATAFILE)
 
