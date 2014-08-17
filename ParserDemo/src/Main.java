@@ -118,14 +118,13 @@ public class Main {
 		for (int k = 0; k < sentSet.size(); k++) {
 
 			outFile = inFile.split("\\.")[0] + "-" + k + "column" + ".dat";
-			System.out.println("OutputFile:" + outPath +outFile);
+			System.out.println("OutputFile:" + outPath + outFile);
 			Set<String> sents = sentSet.get(k);// get sentence
 			System.out.println("All sentences: " + sents.size());
 			Set<String> recordSents = getRecordSents(outPath + outFile);
 			System.out.println("Record sentences: " + recordSents.size());
-			sents.remove(recordSents);
-                        for(String s:recordSents)
-                            sents.remove(s);
+			for (String s : recordSents)
+				sents.remove(s);
 			System.out.println("Left sentences: " + sents.size());
 			parseOneSet(sents, outPath + outFile);
 		}
@@ -150,12 +149,13 @@ public class Main {
 		@Override
 		public void run() {
 			String s = null;
-			if (sent.contains("(") && sent.contains(")") && sent.endsWith(")")) {
-				s = sent.substring(sent.indexOf("(") + 1, sent.indexOf(")"));
-				if (s.length() == 0)
-					s = sent;
-			} else
-				s = sent;
+			// if (sent.contains("(") && sent.contains(")") &&
+			// sent.endsWith(")")) {
+			// s = sent.substring(sent.indexOf("(") + 1, sent.indexOf(")"));
+			// if (s.length() == 0)
+			// s = sent;
+			// } else
+			// s = sent;
 
 			if (s.contains("》") || s.contains("《") || s.contains("【")
 					|| s.contains("】") || s.contains("：")) {
@@ -179,7 +179,7 @@ public class Main {
 
 			synchronized (bw) {
 				try {
-					bw.write(s + delimiter + tw + delimiter + td + "\n");
+					bw.write(sent + delimiter + tw + delimiter + td + "\n");
 					bw.flush();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
