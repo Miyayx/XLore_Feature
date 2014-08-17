@@ -184,7 +184,6 @@ def calculateWordFrequency(d):
             fre = 0
             for s in ss:
                 fre = fre+freD[s]
-            #print key
             try:
                 allFreD[key][i] =float(fre)/totalWord*len(d[unicode(key)])
             except:
