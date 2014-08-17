@@ -1,5 +1,4 @@
-import java.io.BufferedWriter;
-import java.io.File;
+import java.io.BufferedWriter; import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -76,19 +75,22 @@ public class EnglishMain {
 	}
 
 	public static void main(String[] args) {
-		String inPath = "/home/lsj/data/enwiki/";
+		//String inPath = "/home/lsj/data/enwiki/";
 		//String inPath = "/home/lsj/data/zhwiki/";
 		//String inPath = "/home/lsj/data/baidu/";
 		//String inPath = "/home/lsj/data/hudong/";
+		String inPath = "/home/lmy/data/new_data/";
 
 		String outPath = "/home/lmy/data/parser/";
 		//String inPath = "etc/";
 		//String outPath = "etc/";
 		//String inFile = "enwiki-instance-concept-1v1.dat";
-		String inFile = "enwiki-concept-sub-1v1.dat";
+		//String inFile = "enwiki-concept-sub-all-1v1.dat";
+		String inFile = "hudong-instance-concept-1v1.dat";
 		String outFile = "";
 
-		mparser = new EnglishParser();
+		//mparser = new EnglishParser();
+		mparser = new ChineseParser();
 
 		System.out.println("Reading InputFile:" + inFile);
 		List<Set<String>> sentSet = new FileManager(delimiter)
