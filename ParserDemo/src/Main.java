@@ -124,6 +124,8 @@ public class Main {
 			Set<String> recordSents = getRecordSents(outPath + outFile);
 			System.out.println("Record sentences: " + recordSents.size());
 			sents.remove(recordSents);
+                        for(String s:recordSents)
+                            sents.remove(s);
 			System.out.println("Left sentences: " + sents.size());
 			parseOneSet(sents, outPath + outFile);
 		}
