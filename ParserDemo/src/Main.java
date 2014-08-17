@@ -32,7 +32,7 @@ public class Main {
 			bw = new BufferedWriter(writer);
 
 			Iterator<String> it = sents.iterator();
-	
+
 			ThreadPoolExecutor threadPool = new ThreadPoolExecutor(minThread,
 					maxThread, 60, TimeUnit.SECONDS,
 					new LinkedBlockingQueue<Runnable>(10),
@@ -55,11 +55,11 @@ public class Main {
 		}
 	}
 
-	public static Set<String> getRecordSents(String outFile, int k) {
+	public static Set<String> getRecordSents(String outFile) {
 		Set<String> recordSents = new HashSet<String>();
 		try {
 			recordSents = new FileManager(delimiter).readFileToSets(outFile)
-					.get(k);
+					.get(0);
 		} catch (Exception e) {
 		}
 
@@ -117,10 +117,10 @@ public class Main {
 		for (int k = 0; k < sentSet.size(); k++) {
 
 			outFile = inFile.split("\\.")[0] + "-" + k + "column" + ".dat";
-			System.out.println("OutputFile:" + outFile);
+			System.out.println("OutputFile:" + outPath +outFile);
 			Set<String> sents = sentSet.get(k);// get sentence
 			System.out.println("All sentences: " + sents.size());
-			Set<String> recordSents = getRecordSents(outPath + outFile, k);
+			Set<String> recordSents = getRecordSents(outPath + outFile);
 			System.out.println("Record sentences: " + recordSents.size());
 			sents.remove(recordSents);
 			System.out.println("Left sentences: " + sents.size());
