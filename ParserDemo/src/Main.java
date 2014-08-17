@@ -24,17 +24,6 @@ public class Main {
 
 	public static void parseOneSet(Set<String> sents, String outFile) {
 
-		Set<String> recordSents = new HashSet<String>();
-		try {
-			recordSents = new FileManager(delimiter).readFileToSets(outFile)
-					.get(0);
-			for (String s : recordSents)
-				System.out.println(s);
-
-			System.out.println(recordSents.size());
-		} catch (Exception e) {
-		}
-
 		OutputStreamWriter writer = null;
 		BufferedWriter bw = null;
 		try {
@@ -43,9 +32,7 @@ public class Main {
 			bw = new BufferedWriter(writer);
 
 			Iterator<String> it = sents.iterator();
-			int classLen = sents.size();
-			System.out.println("length: " + classLen);
-
+	
 			ThreadPoolExecutor threadPool = new ThreadPoolExecutor(minThread,
 					maxThread, 60, TimeUnit.SECONDS,
 					new LinkedBlockingQueue<Runnable>(10),
@@ -55,10 +42,7 @@ public class Main {
 
 			while (it.hasNext()) {
 				count++;
-
 				String sent = it.next();
-				if (recordSents.contains(sent))
-					continue;
 				threadPool.execute(new ParserThread(count, sent, mparser, bw));
 			}
 
@@ -69,6 +53,17 @@ public class Main {
 			e.printStackTrace();
 		} finally {
 		}
+	}
+
+	public static Set<String> getRecordSents(String outFile, int k) {
+		Set<String> recordSents = new HashSet<String>();
+		try {
+			recordSents = new FileManager(delimiter).readFileToSets(outFile)
+					.get(k);
+		} catch (Exception e) {
+		}
+
+		return recordSents;
 	}
 
 	public static void main(String[] args) {
@@ -124,6 +119,11 @@ public class Main {
 			outFile = inFile.split("\\.")[0] + "-" + k + "column" + ".dat";
 			System.out.println("OutputFile:" + outFile);
 			Set<String> sents = sentSet.get(k);// get sentence
+			System.out.println("All sentences: " + sents.size());
+			Set<String> recordSents = getRecordSents(outFile, k);
+			System.out.println("Record sentences: " + recordSents.size());
+			sents.remove(recordSents);
+			System.out.println("Left sentences: " + sents.size());
 			parseOneSet(sents, outPath + outFile);
 		}
 
