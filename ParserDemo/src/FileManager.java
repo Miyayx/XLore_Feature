@@ -70,7 +70,7 @@ public class FileManager {
 			while ((tempString = reader.readLine()) != null) {
 				String[] words = tempString.split(delimiter,-1);
 				if (sets.size() == 0){
-					for(int k = 0; k < words.length;k++)
+					for(int k = 0; k <= words.length;k++)
 						sets.add(new HashSet<String>());
 				}
 				for(int i = 0;i<words.length;i++){
