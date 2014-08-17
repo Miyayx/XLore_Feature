@@ -1,14 +1,12 @@
-import java.io.BufferedWriter; import java.io.File;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -17,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.stanford.nlp.trees.Tree;
 
-public class EnglishMain {
+public class Main {
 
 	static Parser mparser = null;
 	static String delimiter = "\t\t";
@@ -70,27 +68,53 @@ public class EnglishMain {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-
 		}
 	}
 
 	public static void main(String[] args) {
-		//String inPath = "/home/lsj/data/enwiki/";
-		//String inPath = "/home/lsj/data/zhwiki/";
-		//String inPath = "/home/lsj/data/baidu/";
-		//String inPath = "/home/lsj/data/hudong/";
-		String inPath = "/home/lmy/data/new_data/";
+		// String inPath = "/home/lsj/data/enwiki/";
+		// String inPath = "/home/lsj/data/zhwiki/";
+		// String inPath = "/home/lsj/data/baidu/";
+		// String inPath = "/home/lsj/data/hudong/";
+		String inPath = "/home/lmy/data/";
 
 		String outPath = "/home/lmy/data/parser/";
-		//String inPath = "etc/";
-		//String outPath = "etc/";
-		//String inFile = "enwiki-instance-concept-1v1.dat";
-		//String inFile = "enwiki-concept-sub-all-1v1.dat";
-		String inFile = "hudong-instance-concept-1v1.dat";
+		// String inPath = "etc/";
+		// String outPath = "etc/";
+		// String inFile = "enwiki-instance-concept-1v1.dat";
+		// String inFile = "enwiki-concept-sub-all-1v1.dat";
+		// String inFile = "hudong-instance-concept-1v1.dat";
 		String outFile = "";
 
-		//mparser = new EnglishParser();
-		mparser = new ChineseParser();
+		for (String s : args) {
+			System.out.println(s);
+		}
+
+		if (args.length < 2 || args.length > 4) {
+			System.err.println("Wrong number of auguments");
+			System.err.println("Need 2 or 3 or 4 auguments");
+			System.err.println("1. Language");
+			System.err.println("2. Input file name");
+			System.err.println("3. Input file path");
+			System.err.println("4. Output file path");
+			System.exit(1);
+		}
+
+		if (args[0].equals("en"))
+			mparser = new EnglishParser();
+		else if (args[0].equals("zh"))
+			mparser = new ChineseParser();
+		else {
+			System.err.println("Wrong Language " + args[0]);
+			System.exit(1);
+		}
+
+		String inFile = args[1];
+
+		if (args.length >= 3)
+			inPath = args[2];
+		if (args.length == 4)
+			outPath = args[3];
 
 		System.out.println("Reading InputFile:" + inFile);
 		List<Set<String>> sentSet = new FileManager(delimiter)

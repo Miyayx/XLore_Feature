@@ -39,16 +39,10 @@
 		</javac>
 	</target>
 
-	<target name="ch-main" description="use parser for word segmentation " depends="compile">
-		<java classname="ChineseMain" classpath="${build}" fork="true" maxmemory="30000m">
+	<target name="main" description="use parser for word segmentation " depends="compile">
+		<java classname="Main" classpath="${build}" fork="true" maxmemory="30000m">
 			<classpath refid="Third-Party Libraries" />
-			<arg line="${cmdline}" />
-		</java>
-	</target>
-	<target name="en-main" description="use parser for word segmentation " depends="compile">
-		<java classname="EnglishMain" classpath="${build}" fork="true" maxmemory="30000m">
-			<classpath refid="Third-Party Libraries" />
-			<arg line="${cmdline}" />
+			<arg line="${args}" />
 		</java>
 	</target>
 </project>
