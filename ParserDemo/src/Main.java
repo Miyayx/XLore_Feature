@@ -149,13 +149,13 @@ public class Main {
 		@Override
 		public void run() {
 			String s = null;
-			// if (sent.contains("(") && sent.contains(")") &&
-			// sent.endsWith(")")) {
-			// s = sent.substring(sent.indexOf("(") + 1, sent.indexOf(")"));
-			// if (s.length() == 0)
-			// s = sent;
-			// } else
-			// s = sent;
+			s = sent;
+			if (sent.contains("(") && sent.contains(")") && sent.endsWith(")")) {
+				s = sent.substring(sent.indexOf("(") + 1, sent.indexOf(")"));
+				if (s.length() == 0)
+					s = sent;
+				//s = s.replace('(', ' ').replace(')', ' ');
+			}
 
 			if (s.contains("》") || s.contains("《") || s.contains("【")
 					|| s.contains("】") || s.contains("：")) {
