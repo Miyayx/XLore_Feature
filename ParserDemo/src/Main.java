@@ -61,6 +61,7 @@ public class Main {
 			recordSents = new FileManager(delimiter).readFileToSets(outFile)
 					.get(0);
 		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		return recordSents;
