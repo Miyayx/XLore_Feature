@@ -120,7 +120,7 @@ public class Main {
 			System.out.println("OutputFile:" + outFile);
 			Set<String> sents = sentSet.get(k);// get sentence
 			System.out.println("All sentences: " + sents.size());
-			Set<String> recordSents = getRecordSents(outFile, k);
+			Set<String> recordSents = getRecordSents(outPath + outFile, k);
 			System.out.println("Record sentences: " + recordSents.size());
 			sents.remove(recordSents);
 			System.out.println("Left sentences: " + sents.size());
