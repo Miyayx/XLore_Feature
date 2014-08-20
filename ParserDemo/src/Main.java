@@ -115,7 +115,7 @@ public class Main {
 		System.out.println("Reading InputFile:" + inFile);
 		List<Set<String>> sentSet = new FileManager(delimiter)
 				.readFileToSets(inPath + inFile);
-		for (int k = 0; k < sentSet.size(); k++) {
+		for (int k = 0; k < 2; k++) {
 
 			outFile = inFile.split("\\.")[0] + "-" + k + "column" + ".dat";
 			System.out.println("OutputFile:" + outPath + outFile);

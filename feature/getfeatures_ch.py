@@ -96,7 +96,7 @@ def recordInputtedFile(newfile):
         pass
     return inputted_lines
 
-def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafile):
+def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,featurefile,datafile):
     """
     (str,str) -> NoneType
     str is file name,first is feature-record file, second is class-subclass file
@@ -119,16 +119,20 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
     Output format:
     superclass\tsubclass\t\tf1,f2,f3....\n
     """
-    recorded_items = recordInputtedFile(newfile)
-    print "Have recorded",len(recorded_items),"items"
-    fread = codecs.open(datafile,'r','utf-8')
-    fwrite = codecs.open(newfile,'a','utf-8')
-    for i in range(0,len(recorded_items)):
-        line = fread.readline()
-    while True:
-        line = fread.readline()
-        if not line:
-            break
+    finished = []
+    import os
+    if os.path.isfile(featurefile):
+        for line in open(featurefile):
+            finished.append(line.split("\t\t")[0])
+
+    fwrite = codecs.open(featurefile,'a','utf-8')
+
+    for line in codecs.open(datafile,'r','utf-8'):
+        if line.strip('\n').replace('\t\t','\t') in finished:
+            f_count+=1
+            continue
+        print "Have finished:",f_count
+
         item = line.strip('\n').split(delimiter)
         superStr = item[0]
         subStr = item[1]
@@ -140,10 +144,8 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
             superS = superD[superStr]
             subS = subD[subStr]
         except:
-            #print "Super:",superStr
-            #print "Sub:",subStr
-            print "Super:",len(superD)
-            print "Sub:",len(subD)
+            print "Super:",superStr
+            print "Sub:",subStr
             continue
         relation = getRelationshipOfTwoSets(superS.headword,subS.headword)
         relation8 = getRalationshipOfTwoSets2(superS.headword,subS.unHeadword)
@@ -159,7 +161,6 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
             super_sub_freD[superStr][subStr],
             sub_super_freD[subStr][superStr]))
         fwrite.flush()
-    fread.close()
     fwrite.close()
 
 def calculateWordFrequency(d):
@@ -208,7 +209,7 @@ if __name__ == '__main__':
         print "Len of superD",len(superD)
         superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
         FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
-        superHeadword = {}
+        del superHeadword
 
     subD = {}
     def fun_b():
@@ -217,7 +218,7 @@ if __name__ == '__main__':
         subD = getStr2ObjectDict(SUB_FILE)
         subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
         FileIO.recordHeadword(SUB_HEADWORD_FILE,subHeadword)
-        subHeadword = {}
+        del subHeadword 
 
     super_sub_freD = {}
     sub_super_freD = {}
@@ -228,6 +229,8 @@ if __name__ == '__main__':
         super_sub_freD = calculateWordFrequency(ddict)
         dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delimiter='\t\t')
         sub_super_freD = calculateWordFrequency(dddict)
+        del ddict
+        del dddict
     
     threads = []
     threads.append(threading.Thread(target=fun_a))

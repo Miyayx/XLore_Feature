@@ -111,10 +111,12 @@ if __name__=="__main__":
             print e
             print item
     print 'finish superD'
-    superl = []
+    del superl
     
     superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
     recordHeadword(HEADWORD_PATH+'super_headword.dat',superHeadword)
+
+    del superHeadword
     
     subD = {}
     subl = readDataFromFile(subfile)
@@ -123,13 +125,25 @@ if __name__=="__main__":
             continue
         subD[item[0]] = SingleSent(item)
     print 'finish subD'
-    subl = []
+    del subl
     
     subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
     recordHeadword(HEADWORD_PATH+'sub_headword.dat',subHeadword)
+    del subHeadword
+
+    finished = []
+    import os
+    if os.path.isfile(featurefile):
+        for line in open(featurefile):
+            finished.append(line.split("\t\t")[0])
     
-    fwrite = codecs.open(featurefile,'w','UTF-8')
+    fwrite = codecs.open(featurefile,'a','UTF-8')
+    f_count = 0
     for line in codecs.open(datafile,'r','utf-8'):
+        if line.strip('\n').replace('\t\t','\t') in finished:
+            f_count+=1
+            continue
+        print "Have finished:",f_count
         item = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
         try:
             superS = superD[item[0]]
