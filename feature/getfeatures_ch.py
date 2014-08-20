@@ -5,12 +5,13 @@ from CHSingleSent import *
 import FileIO
 import threading
 
-DATA_PATH = "/home/lsj/data/zhwiki/"
+DATA_PATH = "/home/lmy/data/new_data/"
 PARSER_PATH = "/home/lmy/data/parser/"
 FEATURE_PATH = "/home/lmy/data/feature/"
 HEADWORD_PATH = "./headword/"
 
-FILE_NAME = "zhwiki-instance-concept-1v1.dat"
+FILE_NAME = "hudong-instance-concept-1v1.dat"
+#FILE_NAME = "hudong-concept-sub-all-1v1.dat"
 
 DATAFILE= DATA_PATH + FILE_NAME
 SUPER_FILE = PARSER_PATH+FILE_NAME.split(".")[0]+"-0column.dat"
@@ -30,7 +31,13 @@ def getStr2ObjectDict(filename):
     str(filename) -> list of CHSingleSent
     """
     l = FileIO.readDataFromFile(filename)
-    return dict([item[0],CHSingleSent(item)] for item in l )
+    i2css = {}
+    for item in l:
+        try:
+            i2css[item[0]] = CHSingleSent(item)
+        except:
+            print "String Error:",item[0]
+    return i2css
 
 def getRelationshipOfTwoSets(l1,l2):
     """
@@ -98,15 +105,16 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
     1. Relationship of super headword and subclass headword (look at the relation list )
     2. If sub(the whole string) starts with super(the whole string)
     3. If sub(the whole string) ends with super(the whole string)
-    4. Length of superclass headword set
-    5. Length of subclass headword set
-    6. Length of superclass string
-    7. Length of subclass string
-    8. Relationship of superclass headwords set and subclass unheadword set
-    9. Relationship of subclass headwords set and superclass unheadword set
-    10.Frequency ratio a sub string's words appear to in the same super 
-    11.Frequency ratio a super string's words appear to in the same sub 
-    12.
+    4. If super(the whole string) starts with sub(the whole string)
+    5. If super(the whole string) ends with sub(the whole string)
+    6. Length of superclass headword set
+    7. Length of subclass headword set
+    8. Length of superclass string
+    9. Length of subclass string
+    10.Relationship of superclass headwords set and subclass unheadword set
+    11.Relationship of subclass headwords set and superclass unheadword set
+    12.Frequency ratio a sub string's words appear to in the same super 
+    13.Frequency ratio a super string's words appear to in the same sub 
     
     Output format:
     superclass\tsubclass\t\tf1,f2,f3....\n
@@ -132,13 +140,14 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,newfile,datafil
             superS = superD[superStr]
             subS = subD[subStr]
         except:
-            print superStr
-            print subStr
+            #print "Super:",superStr
+            #print "Sub:",subStr
+            print "Super:",len(superD)
+            print "Sub:",len(subD)
             continue
         relation = getRelationshipOfTwoSets(superS.headword,subS.headword)
         relation8 = getRalationshipOfTwoSets2(superS.headword,subS.unHeadword)
         relation9 = getRalationshipOfTwoSets2(subS.headword,superS.unHeadword)
-        print "write one line"
         fwrite.write('%s\t%s\t\t%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%.3f,%.3f\n'%(
             superStr,subStr,relation,
             1 if subStr.startswith(superStr) else 0,
@@ -196,6 +205,7 @@ if __name__ == '__main__':
         print "Calculating Object of super..."
         global superD
         superD = getStr2ObjectDict(SUPER_FILE)
+        print "Len of superD",len(superD)
         superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
         FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
         superHeadword = {}

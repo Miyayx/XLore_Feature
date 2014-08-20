@@ -5,8 +5,7 @@ delimiter = "\t\t"
 
 typed = ["root", "prep","nn", "dep", "amod", "conj", "det", "abbrev", "poss", "appos", 
 "nsubj", "pobj", "dobj", "num","npadvmod", "aux", "advmod", "rcmod", "cop", "xcomp", 
-"partmod","prt", "prepc"]
-
+"partmod","prt", "prepc"] 
 relations = ['equal','contain','contained','no relation','other']
 numberType = ['singular','plural','unknown']
 
@@ -84,14 +83,15 @@ def recordHeadword(filename,d):
                 f.write("\t%s"%i)
             f.write("\n")
 
-DATA_PATH = "/home/lsj/data/enwiki/"
+DATA_PATH = "/home/lmy/data/new_data/"
 PARSER_PATH = "/home/lmy/data/parser/"
 FEATURE_PATH = "/home/lmy/data/feature/"
 HEADWORD_PATH = "./headword/"
 
 if __name__=="__main__":
     
-    FILE_NAME = "enwiki-instance-concept-1v1.dat"
+    #FILE_NAME = "enwiki-instance-concept-1v1.dat"
+    FILE_NAME = "enwiki-concept-sub-all-1v1.dat"
     datafile = DATA_PATH+FILE_NAME
     superfile = PARSER_PATH+FILE_NAME.split(".")[0]+"-0column.dat"
     subfile = PARSER_PATH+FILE_NAME.split(".")[0]+"-1column.dat"
@@ -144,5 +144,5 @@ if __name__=="__main__":
             item[0],item[1],relation,superS.hwNumber,subS.hwNumber,superS.hwLen,
             subS.hwLen,superS.wordLen,subS.wordLen,relation8,relation9))
         fwrite.flush()
-    fread.close()
+    fwrite.close()
     print 'end'

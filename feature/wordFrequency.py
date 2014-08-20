@@ -1,7 +1,10 @@
 import codecs
-readfile="/home/zigo/SemantifyWiki/etc/dataset/sample-2-title.dat"
-finalreadfile = '/home/lmy/data/CLKB/sample-2-9features.dat'
-finalwritefile = '/home/lmy/data/CLKB/sample-2-11features.dat'
+DATA_PATH = '/home/lmy/data/new_data/'
+FEATURE_PATH = '/home/lmy/data/feature/'
+
+FILE_NAME=  'enwiki-instance-concept-1v1.dat'
+FEATURE9 =  'enwiki-instance-concept-1v1-feature9.dat'
+FEATURE11 = 'enwiki-instance-concept-1v1-feature11.dat'
 
 def readTwoColumnsToDict(filename,reverse = False):
     d = {}    
@@ -41,19 +44,19 @@ def calculateWordFrequency(d):
             allFreD[key][i] =float(fre)/totalWord*len(d[key])
     return allFreD
 
-ddict = readTwoColumnsToDict(readfile)
+ddict = readTwoColumnsToDict(DATA_PATH+FILE_NAME )
 fD = calculateWordFrequency(ddict)
-dddict = readTwoColumnsToDict(readfile,True)
+dddict = readTwoColumnsToDict(DATA_PATH+FILE_NAME ,True)
 ffD = calculateWordFrequency(dddict)
 
-rf = codecs.open(readfile,'r','utf8')
+rf = codecs.open(DATA_PATH+FILE_NAME,'r','utf8')
 c = []
 for line in rf.readlines():
     c.append(line.strip('\n'))
 rf.close()
 
-rf = codecs.open(finalreadfile,'r','utf-8')
-wf = codecs.open(finalwritefile,'w','utf-8')
+rf = codecs.open(FEATURE_PATH+FEATURE9,'r','utf-8')
+wf = codecs.open(FEATURE_PATH+FEATURE11,'w','utf-8')
 count = 0
 for line in rf.readlines():
     classes = c[count].split('\t\t')

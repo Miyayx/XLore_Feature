@@ -10,7 +10,6 @@ numberType = ['singular','plural','unknown']
 class CHSingleSent:
     
     def __init__(self,item):
-        #try:
         self.string = item[0]
         self.typedDependency = item[2]
         self.taggedWords = item[1]
@@ -20,9 +19,6 @@ class CHSingleSent:
         self.hwLen = len(self.headword)
         self.wordLen = len(self.string)
         self.unHeadword = [word for word in self.allWords if word not in self.headword]
-        #except:
-        #    print "Error"
-        #    print item[0]
         self.typedDependency = None
         self.taggedWords = None
         self.taggedD = None
