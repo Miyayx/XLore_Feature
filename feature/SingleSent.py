@@ -19,9 +19,9 @@ class SingleSent:
                 self.unHeadword.remove(s)
 
         # Delete no use value for free memory
-        self.typedDependency = None
-        self.taggedWords = None
-        self.taggedD = None
+        del self.typedDependency 
+        del self.taggedWords 
+        del self.taggedD 
 
     def separateTypedDependency(self,tdstr):
     

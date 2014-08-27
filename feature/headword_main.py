@@ -99,51 +99,66 @@ if __name__=="__main__":
     super_headword_file = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-superheadword.dat"
     sub_headword_file = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-subheadword.dat"
 
+    finished = []
+    import os
+    if os.path.isfile(featurefile):
+        for line in codecs.open(featurefile,'r','utf-8'):
+            finished.append(line.split("\t\t")[0])
+    all_ = []
+    for line in codecs.open(datafile,'r','utf-8'):
+        all_.append(line.strip("\n").replace("\t\t","\t"))
+
+    unfinished = list(set(all_) - set(finished))
+
+    print "ALL:",len(all_)
+    print "Finished",len(finished)
+    print "Unfinished",len(unfinished)
+
+    del finished
+    del all_
+
+    super_items = set([i.split("\t")[0] for i in unfinished])
+    sub_items = set([i.split("\t")[1] for i in unfinished])
+    
     superl = []
     superD = {}
     superl = readDataFromFile(superfile)
     for item in superl:
         if len(item[2]) <= 0:
             continue
-        try:
-            superD[item[0]] = SingleSent(item)
-        except Exception,e:
-            print e
-            print item
+        if item[0] in super_items:
+            try:
+                superD[item[0]] = SingleSent(item)
+            except Exception,e:
+                print e
+                print item
     print 'finish superD'
     del superl
     
-    superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
-    recordHeadword(HEADWORD_PATH+'super_headword.dat',superHeadword)
-
-    del superHeadword
+    #superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
+    #recordHeadword(HEADWORD_PATH+'super_headword.dat',superHeadword)
+    #del superHeadword
     
     subD = {}
     subl = readDataFromFile(subfile)
     for item in subl:
         if len(item[2]) <= 0:
             continue
-        subD[item[0]] = SingleSent(item)
+        if item[0] in sub_items:
+            try:
+                subD[item[0]] = SingleSent(item)
+            except Exception,e:
+                print e
+                print item
     print 'finish subD'
     del subl
     
-    subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
-    recordHeadword(HEADWORD_PATH+'sub_headword.dat',subHeadword)
-    del subHeadword
+    #subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
+    #recordHeadword(HEADWORD_PATH+'sub_headword.dat',subHeadword)
+    #del subHeadword
 
-    finished = []
-    import os
-    if os.path.isfile(featurefile):
-        for line in open(featurefile):
-            finished.append(line.split("\t\t")[0])
-    
     fwrite = codecs.open(featurefile,'a','UTF-8')
-    f_count = 0
-    for line in codecs.open(datafile,'r','utf-8'):
-        if line.strip('\n').replace('\t\t','\t') in finished:
-            f_count+=1
-            continue
-        print "Have finished:",f_count
+    for line in unfinished:
         item = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
         try:
             superS = superD[item[0]]

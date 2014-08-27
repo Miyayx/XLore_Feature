@@ -19,10 +19,10 @@ class CHSingleSent:
         self.hwLen = len(self.headword)
         self.wordLen = len(self.string)
         self.unHeadword = [word for word in self.allWords if word not in self.headword]
-        self.typedDependency = None
-        self.taggedWords = None
-        self.taggedD = None
-        self.allWords = None
+        del self.typedDependency 
+        del self.taggedWords 
+        del self.taggedD 
+        del self.allWords 
 
     def separateTypedDependency(self,tdstr):
         """
