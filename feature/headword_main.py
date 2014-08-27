@@ -1,7 +1,8 @@
 from SingleSent import *
 import codecs
 
-delimiter = "\t\t"
+DATA_DELIMITER = "\t\t"
+FEATURE_ITEM_DELIMITER = "\t"
 
 typed = ["root", "prep","nn", "dep", "amod", "conj", "det", "abbrev", "poss", "appos", 
 "nsubj", "pobj", "dobj", "num","npadvmod", "aux", "advmod", "rcmod", "cop", "xcomp", 
@@ -13,7 +14,7 @@ def readDataFromFile(filename):
     print filename
     llist = []
     for line in codecs.open(filename,'r','utf-8'):
-        eachLine = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
+        eachLine = line.strip('\n').split(DATA_DELIMITER)#strip('\n') to remove line feed
         llist.append(eachLine)
             
     print len(llist)
@@ -103,10 +104,10 @@ if __name__=="__main__":
     import os
     if os.path.isfile(featurefile):
         for line in codecs.open(featurefile,'r','utf-8'):
-            finished.append(line.split("\t\t")[0])
+            finished.append(line.split(DATA_DELIMITER)[0])
     all_ = []
     for line in codecs.open(datafile,'r','utf-8'):
-        all_.append(line.strip("\n").replace("\t\t","\t"))
+        all_.append(line.strip("\n").replace(DATA_DELIMITER,FEATURE_ITEM_DELIMITER))
 
     unfinished = list(set(all_) - set(finished))
 
@@ -117,8 +118,8 @@ if __name__=="__main__":
     del finished
     del all_
 
-    super_items = set([i.split("\t")[0] for i in unfinished])
-    sub_items = set([i.split("\t")[1] for i in unfinished])
+    super_items = set([i.split(FEATURE_ITEM_DELIMITER)[0] for i in unfinished])
+    sub_items = set([i.split(FEATURE_ITEM_DELIMITER)[1] for i in unfinished])
     
     superl = []
     superD = {}
@@ -159,7 +160,7 @@ if __name__=="__main__":
 
     fwrite = codecs.open(featurefile,'a','UTF-8')
     for line in unfinished:
-        item = line.strip('\n').split(delimiter)#strip('\n') to remove line feed
+        item = line.strip('\n').split(FEATURE_ITEM_DELIMITER)#strip('\n') to remove line feed
         try:
             superS = superD[item[0]]
             subS = subD[item[1]]
