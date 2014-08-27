@@ -21,7 +21,7 @@ ParserDemo
 >* ant main -Dargs='zh input_file_name input_path'
 >* ant main -Dargs='zh input_file_name input_path output_path'
 
-* Default Input Path: /home/lmy/data/
+* Default Input Path: /home/lmy/data/origin/
 * Default Output Path: /home/lmy/data/parser/
 
 Note:
@@ -29,7 +29,12 @@ There may be mistakes when parsing. You can rerun the program. Unless you remove
 
 Feature 
 ------
-####1. Get headword
+####1.English
+> python headword_main.py  #The first 9 features
+> python wordFrequency.py  #Add the 10, 11 features
+> python add12thFeature.py
 
-####2. Get feature
+####2. Chinese
+> python getfeatures_ch.py  #The all 13 features
 
+**Change the path and file name in python file first**
