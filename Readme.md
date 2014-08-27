@@ -30,11 +30,11 @@ There may be mistakes when parsing. You can rerun the program. Unless you remove
 Feature 
 ------
 ####1.English
-> python headword_main.py  #The first 9 features
-> python wordFrequency.py  #Add the 10, 11 features
+> python headword_main.py   The first 9 features
+> python wordFrequency.py   Add the 10, 11 features
 > python add12thFeature.py
 
 ####2. Chinese
-> python getfeatures_ch.py  #The all 13 features
+> python getfeatures_ch.py  The all 13 features
 
 **Change the path and file name in python file first**

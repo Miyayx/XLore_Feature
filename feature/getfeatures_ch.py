@@ -217,48 +217,48 @@ if __name__ == '__main__':
     sub_items = set([i.split(FEATURE_ITEM_DELIMITER)[1] for i in unfinished])
 
     superD = {}
-    def fun_a():
-        print "Calculating Object of super..."
-        global superD
-        superD = getStr2ObjectDict(SUPER_FILE, super_items)
-        print "Len of superD",len(superD)
-        #superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
-        #FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
-        #del superHeadword
+    #def fun_a():
+    print "Calculating Object of super..."
+    #global superD
+    superD = getStr2ObjectDict(SUPER_FILE, super_items)
+    print "Len of superD",len(superD)
+    #superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
+    #FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
+    #del superHeadword
 
     subD = {}
-    def fun_b():
-        print "Calculating Object of sub..."
-        global subD
-        subD = getStr2ObjectDict(SUB_FILE, sub_items)
-        print "Len of subD",len(subD)
-        #subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
-        #FileIO.recordHeadword(SUB_HEADWORD_FILE,subHeadword)
-        #del subHeadword 
+    #def fun_b():
+    print "Calculating Object of sub..."
+    #global subD
+    subD = getStr2ObjectDict(SUB_FILE, sub_items)
+    print "Len of subD",len(subD)
+    #subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
+    #FileIO.recordHeadword(SUB_HEADWORD_FILE,subHeadword)
+    #del subHeadword 
 
     super_sub_freD = {}
     sub_super_freD = {}
-    def fun_c():
-        print "Calculating frequency..."
-        global super_sub_freD,sub_super_freD
-        ddict = FileIO.readTwoColumnsToDict(DATAFILE,delimiter=DATA_DELIMITER)
-        super_sub_freD = calculateWordFrequency(ddict)
-        dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delimiter=DATA_DELIMITER)
-        sub_super_freD = calculateWordFrequency(dddict)
-        del ddict
-        del dddict
+    #def fun_c():
+    print "Calculating frequency..."
+    #global super_sub_freD,sub_super_freD
+    ddict = FileIO.readTwoColumnsToDict(DATAFILE,delimiter=DATA_DELIMITER)
+    super_sub_freD = calculateWordFrequency(ddict)
+    dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delimiter=DATA_DELIMITER)
+    sub_super_freD = calculateWordFrequency(dddict)
+    del ddict
+    del dddict
     
-    threads = []
-    threads.append(threading.Thread(target=fun_a))
-    threads.append(threading.Thread(target=fun_b))
-    threads.append(threading.Thread(target=fun_c))
+    #threads = []
+    #threads.append(threading.Thread(target=fun_a))
+    #threads.append(threading.Thread(target=fun_b))
+    #threads.append(threading.Thread(target=fun_c))
 
-    for t in threads:
-        t.start()
+    #for t in threads:
+    #    t.start()
 
-    for t in threads:
-        t.join()
-    
+    #for t in threads:
+    #    t.join()
+
     print "Writing to file..."
     writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,FEATURE13,unfinished)
 
