@@ -5,7 +5,7 @@ from CHSingleSent import *
 import FileIO
 import threading
 
-DATA_PATH = "/home/lmy/data/new_data/"
+DATA_PATH = "/home/lmy/data/origin/"
 PARSER_PATH = "/home/lmy/data/parser/"
 FEATURE_PATH = "/home/lmy/data/feature/"
 HEADWORD_PATH = "./headword/"
@@ -34,7 +34,7 @@ def getStr2ObjectDict(filename, items):
     l = FileIO.readDataFromFile(filename)
     i2css = {}
     for item in l:
-        if not item in items:
+        if not item[0] in items:
             continue
         try:
             i2css[item[0]] = CHSingleSent(item)
@@ -197,11 +197,11 @@ if __name__ == '__main__':
 
     finished = []
     import os
-    if os.path.isfile(featurefile):
-        for line in codecs.open(featurefile,'r','utf-8'):
+    if os.path.isfile(FEATURE13):
+        for line in codecs.open(FEATURE13,'r','utf-8'):
             finished.append(line.split(DATA_DELIMITER)[0])
     all_ = []
-    for line in codecs.open(datafile,'r','utf-8'):
+    for line in codecs.open(DATAFILE,'r','utf-8'):
         all_.append(line.strip("\n").replace(DATA_DELIMITER,FEATURE_ITEM_DELIMITER))
 
     unfinished = list(set(all_) - set(finished))
@@ -241,9 +241,9 @@ if __name__ == '__main__':
     def fun_c():
         print "Calculating frequency..."
         global super_sub_freD,sub_super_freD
-        ddict = FileIO.readTwoColumnsToDict(DATAFILE,delemiter=DATA_DELIMITER)
+        ddict = FileIO.readTwoColumnsToDict(DATAFILE,delimiter=DATA_DELIMITER)
         super_sub_freD = calculateWordFrequency(ddict)
-        dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delemiter=DATA_DELIMITER)
+        dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delimiter=DATA_DELIMITER)
         sub_super_freD = calculateWordFrequency(dddict)
         del ddict
         del dddict
