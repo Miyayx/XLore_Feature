@@ -22,17 +22,20 @@ FEATURE13=FEATURE_PATH+FILE_NAME.split(".")[0]+"-feature13.dat"
 SUPER_HEADWORD_FILE = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-superheadword.dat"
 SUB_HEADWORD_FILE = HEADWORD_PATH+FILE_NAME.split(".")[0]+"-subheadword.dat"
 
-delimiter = '\t\t'
+DATA_DELIMITER = '\t\t'
+FEATURE_ITEM_DELIMITER = '\t'
 
 relations = ['equal','contain','contained','no relation','other']
 
-def getStr2ObjectDict(filename):
+def getStr2ObjectDict(filename, items):
     """
     str(filename) -> list of CHSingleSent
     """
     l = FileIO.readDataFromFile(filename)
     i2css = {}
     for item in l:
+        if not item in items:
+            continue
         try:
             i2css[item[0]] = CHSingleSent(item)
         except:
@@ -91,12 +94,12 @@ def recordInputtedFile(newfile):
     inputted_lines = []
     try:
        for line in codecs.open(newfile,'r','utf-8'):
-           inputted_lines.append(line.strip('\n').split(delimiter)[0])
+           inputted_lines.append(line.strip('\n').split(DATA_DELIMITER)[0])
     except:
         pass
     return inputted_lines
 
-def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,featurefile,datafile):
+def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,featurefile,items):
     """
     (str,str) -> NoneType
     str is file name,first is feature-record file, second is class-subclass file
@@ -119,21 +122,11 @@ def writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,featurefile,dat
     Output format:
     superclass\tsubclass\t\tf1,f2,f3....\n
     """
-    finished = []
-    import os
-    if os.path.isfile(featurefile):
-        for line in open(featurefile):
-            finished.append(line.split("\t\t")[0])
 
     fwrite = codecs.open(featurefile,'a','utf-8')
 
-    for line in codecs.open(datafile,'r','utf-8'):
-        if line.strip('\n').replace('\t\t','\t') in finished:
-            f_count+=1
-            continue
-        print "Have finished:",f_count
-
-        item = line.strip('\n').split(delimiter)
+    for line in items:
+        item = line.strip('\n').split(FEATURE_ITEM_DELIMITER)
         superStr = item[0]
         subStr = item[1]
         if len(subStr) == 0:
@@ -201,33 +194,56 @@ def calculateWordFrequency(d):
     return allFreD
 
 if __name__ == '__main__':
+
+    finished = []
+    import os
+    if os.path.isfile(featurefile):
+        for line in codecs.open(featurefile,'r','utf-8'):
+            finished.append(line.split(DATA_DELIMITER)[0])
+    all_ = []
+    for line in codecs.open(datafile,'r','utf-8'):
+        all_.append(line.strip("\n").replace(DATA_DELIMITER,FEATURE_ITEM_DELIMITER))
+
+    unfinished = list(set(all_) - set(finished))
+
+    print "ALL:",len(all_)
+    print "Finished",len(finished)
+    print "Unfinished",len(unfinished)
+
+    del finished
+    del all_
+
+    super_items = set([i.split(FEATURE_ITEM_DELIMITER)[0] for i in unfinished])
+    sub_items = set([i.split(FEATURE_ITEM_DELIMITER)[1] for i in unfinished])
+
     superD = {}
     def fun_a():
         print "Calculating Object of super..."
         global superD
-        superD = getStr2ObjectDict(SUPER_FILE)
+        superD = getStr2ObjectDict(SUPER_FILE, super_items)
         print "Len of superD",len(superD)
-        superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
-        FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
-        del superHeadword
+        #superHeadword = dict((k,v.headword) for k,v in superD.iteritems())
+        #FileIO.recordHeadword(SUPER_HEADWORD_FILE,superHeadword)
+        #del superHeadword
 
     subD = {}
     def fun_b():
         print "Calculating Object of sub..."
         global subD
-        subD = getStr2ObjectDict(SUB_FILE)
-        subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
-        FileIO.recordHeadword(SUB_HEADWORD_FILE,subHeadword)
-        del subHeadword 
+        subD = getStr2ObjectDict(SUB_FILE, sub_items)
+        print "Len of subD",len(subD)
+        #subHeadword = dict((k,v.headword) for k,v in subD.iteritems())
+        #FileIO.recordHeadword(SUB_HEADWORD_FILE,subHeadword)
+        #del subHeadword 
 
     super_sub_freD = {}
     sub_super_freD = {}
     def fun_c():
         print "Calculating frequency..."
         global super_sub_freD,sub_super_freD
-        ddict = FileIO.readTwoColumnsToDict(DATAFILE,delimiter='\t\t')
+        ddict = FileIO.readTwoColumnsToDict(DATAFILE,delemiter=DATA_DELIMITER)
         super_sub_freD = calculateWordFrequency(ddict)
-        dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delimiter='\t\t')
+        dddict = FileIO.readTwoColumnsToDict(DATAFILE,True,delemiter=DATA_DELIMITER)
         sub_super_freD = calculateWordFrequency(dddict)
         del ddict
         del dddict
@@ -244,5 +260,5 @@ if __name__ == '__main__':
         t.join()
     
     print "Writing to file..."
-    writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,FEATURE13,DATAFILE)
+    writeFeatureToFile(superD,subD,super_sub_freD,sub_super_freD,FEATURE13,unfinished)
 
