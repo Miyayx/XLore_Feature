@@ -1,5 +1,5 @@
 import codecs
-DATA_PATH = '/home/lmy/data/new_data/'
+DATA_PATH = '/home/lmy/data/origin/'
 FEATURE_PATH = '/home/lmy/data/feature/'
 
 FILE_NAME=  'enwiki-instance-concept-1v1.dat'

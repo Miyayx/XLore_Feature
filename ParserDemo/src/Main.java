@@ -72,7 +72,7 @@ public class Main {
 		// String inPath = "/home/lsj/data/zhwiki/";
 		// String inPath = "/home/lsj/data/baidu/";
 		// String inPath = "/home/lsj/data/hudong/";
-		String inPath = "/home/lmy/data/";
+		String inPath = "/home/lmy/data/origin/";
 
 		String outPath = "/home/lmy/data/parser/";
 		// String inPath = "etc/";

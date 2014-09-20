@@ -10,8 +10,8 @@ PARSER_PATH = "/home/lmy/data/parser/"
 FEATURE_PATH = "/home/lmy/data/feature/"
 HEADWORD_PATH = "./headword/"
 
-FILE_NAME = "hudong-instance-concept-1v1.dat"
-#FILE_NAME = "hudong-concept-sub-all-1v1.dat"
+#FILE_NAME = "zhwiki-instance-concept-1v1.dat"
+FILE_NAME = "zhwiki-concept-sub-all-1v1.dat"
 
 DATAFILE= DATA_PATH + FILE_NAME
 SUPER_FILE = PARSER_PATH+FILE_NAME.split(".")[0]+"-0column.dat"

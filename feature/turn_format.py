@@ -1,6 +1,6 @@
 
-READ_FILE = "/home/keg/wzg/CLKB/etc/ontology/hudong-tree.dat"
-OUTPUT_FILE = "/home/keg/lmy/parserInPython/hudong-tree-1to1.dat"
+READ_FILE = "/home/lmy/data/origin/zhwiki-concept-sub-all.dat"
+OUTPUT_FILE = READ_FILE.split(".")[0]+"-1v1.dat"
 
 if __name__ == "__main__":
     one_to_one = [] 
